@@ -7,7 +7,7 @@ USE double
 IMPLICIT NONE
 
 INTEGER, PARAMETER :: syr_spin = 1901, eyr_spin = 1901
-INTEGER, PARAMETER :: syr_tran = 1901, eyr_tran = 1905
+INTEGER, PARAMETER :: syr_tran = 1901, eyr_tran = 1901
 INTEGER, PARAMETER :: nlon_qd = 1440, nlat_qd = 720
 INTEGER, PARAMETER :: nlon = 720, nlat = 360, ntimes = 1460
 REAL(KIND=DP), PARAMETER :: tf = 273.15_DP
@@ -240,10 +240,10 @@ DO y = 1, nlat
  END DO
 END DO
 OPEN (10,FILE="B.bin",FORM="UNFORMATTED",STATUS="UNKNOWN")
-WRITE (10) B / 1.0D3
+WRITE (10) B
 CLOSE (10)
 OPEN (10,FILE="SOM.bin",FORM="UNFORMATTED",STATUS="UNKNOWN")
-WRITE (10) SOM / 1.0D3
+WRITE (10) SOM
 CLOSE (10)
 
 ! Transient run.
