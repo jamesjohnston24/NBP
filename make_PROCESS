@@ -1,0 +1,24 @@
+F90 = ifort
+
+#FFLAGS = -check -traceback
+FFLAGS = -O2
+LDFLAGS = -lnetcdff -lnetcdf
+
+SRC = \
+	PROCESS.f90 \
+	double.f90
+
+OBJ = $(SRC:.f90=.o)
+
+PROCESS.exe : $(OBJ)
+	$(F90) $(FFLAGS) -o PROCESS.exe $(OBJ) $(LDFLAGS)
+
+# Main routine.
+PROCESS.o : double.o PROCESS.f90
+	$(F90) $(FFLAGS) -c PROCESS.f90
+	
+# Subroutines.
+	
+# Modules.
+double.o : double.f90
+	$(F90) $(FFLAGS) -c double.f90
