@@ -1,0 +1,24 @@
+F90 = ifort
+
+#FFLAGS = -check -traceback
+FFLAGS = -O2
+LDFLAGS = -lnetcdff -lnetcdf
+
+SRC = \
+	NBP.f90 \
+	double.f90
+
+OBJ = $(SRC:.f90=.o)
+
+NBP.exe : $(OBJ)
+	$(F90) $(FFLAGS) -o NBP.exe $(OBJ) $(LDFLAGS)
+
+# Main routine.
+NBP.o : double.o NBP.f90
+	$(F90) $(FFLAGS) -c NBP.f90
+	
+# Subroutines.
+	
+# Modules.
+double.o : double.f90
+	$(F90) $(FFLAGS) -c double.f90
