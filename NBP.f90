@@ -40,7 +40,7 @@ WRITE (*,*) 'Running NBP...'
 ALLOCATE (tmp(nlon,nlat,ntimes))
 ALLOCATE (pre(nlon,nlat,ntimes))
 
-file_name = '/rds/user/adf10/rds-mb425-geogscratch/adf10/TRENDY2021/&
+file_name = '/rds/user/jhj34/rds-mb425-geogscratch/adf10/TRENDY2021/&
  &input/LUH2_GCB_2021/staticData_quarterdeg.nc'
 WRITE (*,"(A,A)") 'Opening file: ',TRIM(file_name)
 CALL CHECK (NF90_OPEN (TRIM (file_name), NF90_NOWRITE, ncid))
@@ -67,7 +67,7 @@ DO kyr_clm = syr_spin, eyr_spin
 
  var_name = 'tmp'
  WRITE (char_year, '(I4)') kyr_clm
- file_name = '/rds/user/adf10/rds-mb425-geogscratch/adf10/TRENDY2021/&
+ file_name = '/rds/user/jhj34/rds-mb425-geogscratch/adf10/TRENDY2021/&
   &input/CRUJRA2021/'//'crujra.v2.2.5d.'//TRIM(var_name)//'.'//&
   &char_year//'.365d.noc.nc'
  WRITE (*,"(A,A)") 'Opening file: ',TRIM(file_name)
@@ -78,7 +78,7 @@ DO kyr_clm = syr_spin, eyr_spin
  CALL CHECK (NF90_CLOSE (ncid))
 
  var_name = 'pre'
- file_name = '/rds/user/adf10/rds-mb425-geogscratch/adf10/TRENDY2021/&
+ file_name = '/rds/user/jhj34/rds-mb425-geogscratch/adf10/TRENDY2021/&
   &input/CRUJRA2021/'//'crujra.v2.2.5d.'//TRIM(var_name)//'.'//&
   &char_year//'.365d.noc.nc'
  WRITE (*,"(A,A)") 'Opening file: ',TRIM(file_name)
@@ -129,7 +129,7 @@ DO kyr_clm = syr_spin, eyr_spin
 
  var_name = 'tmp'
  WRITE (char_year, '(I4)') kyr_clm
- file_name = '/rds/user/adf10/rds-mb425-geogscratch/adf10/TRENDY2021/&
+ file_name = '/rds/user/jhj34/rds-mb425-geogscratch/adf10/TRENDY2021/&
   &input/CRUJRA2021/'//'crujra.v2.2.5d.'//TRIM(var_name)//'.'//&
   &char_year//'.365d.noc.nc'
  WRITE (*,"(A,A)") 'Opening file: ',TRIM(file_name)
@@ -140,7 +140,7 @@ DO kyr_clm = syr_spin, eyr_spin
  CALL CHECK (NF90_CLOSE (ncid))
 
  var_name = 'pre'
- file_name = '/rds/user/adf10/rds-mb425-geogscratch/adf10/TRENDY2021/&
+ file_name = '/rds/user/jhj34/rds-mb425-geogscratch/adf10/TRENDY2021/&
   &input/CRUJRA2021/'//'crujra.v2.2.5d.'//TRIM(var_name)//'.'//&
   &char_year//'.365d.noc.nc'
  WRITE (*,"(A,A)") 'Opening file: ',TRIM(file_name)
@@ -252,7 +252,7 @@ DO kyr_clm = syr_tran, eyr_tran
 
  var_name = 'tmp'
  WRITE (char_year, '(I4)') kyr_clm
- file_name = '/rds/user/adf10/rds-mb425-geogscratch/adf10/TRENDY2021/&
+ file_name = '/rds/user/jhj34/rds-mb425-geogscratch/adf10/TRENDY2021/&
   &input/CRUJRA2021/'//'crujra.v2.2.5d.'//TRIM(var_name)//'.'//&
   &char_year//'.365d.noc.nc'
  WRITE (*,"(A,A)") 'Opening file: ',TRIM(file_name)
@@ -263,7 +263,7 @@ DO kyr_clm = syr_tran, eyr_tran
  CALL CHECK (NF90_CLOSE (ncid))
 
  var_name = 'pre'
- file_name = '/rds/user/adf10/rds-mb425-geogscratch/adf10/TRENDY2021/&
+ file_name = '/rds/user/jhj34/rds-mb425-geogscratch/adf10/TRENDY2021/&
   &input/CRUJRA2021/'//'crujra.v2.2.5d.'//TRIM(var_name)//'.'//&
   &char_year//'.365d.noc.nc'
  WRITE (*,"(A,A)") 'Opening file: ',TRIM(file_name)
