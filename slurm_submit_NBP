@@ -12,7 +12,7 @@
 #! Name of the job:
 #SBATCH -J cpujob
 #! Which project should be charged:
-#SBATCH -A BITHELL-IPBES-SL2-CPU
+#SBATCH -A BITHELL-SL2-CPU
 #! How many whole nodes should be allocated?
 #! nodes: 2   8   32
 #! cpus: 64 256 1024
@@ -55,7 +55,7 @@ mpi_tasks_per_node=$(echo "$SLURM_TASKS_PER_NODE" | sed -e  's/^\([0-9][0-9]*\).
 #! (note that SLURM reproduces the environment at submission irrespective of ~/.bashrc):
 . /etc/profile.d/modules.sh                # Leave this line (enables the module command)
 module purge                               # Removes all modules still loaded
-module load rhel7/default-peta4            # REQUIRED - loads the basic environment
+module load rhel7/default-icl            # REQUIRED - loads the basic environment
 module load netcdf-fortran-4.4.4-intel-17.0.4-cesnirf netcdf-4.4.1.1-intel-17.0.4-klwe3pg
 
 #! Insert additional module load commands after this line if needed:

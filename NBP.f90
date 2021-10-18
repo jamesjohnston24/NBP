@@ -6,8 +6,8 @@ USE double
 
 IMPLICIT NONE
 
-INTEGER, PARAMETER :: syr_spin = 1901, eyr_spin = 1901
-INTEGER, PARAMETER :: syr_tran = 1902, eyr_tran = 1903
+INTEGER, PARAMETER :: syr_spin = 1901, eyr_spin = 1903
+INTEGER, PARAMETER :: syr_tran = 1903, eyr_tran = 1905
 INTEGER, PARAMETER :: nlon_qd = 1440, nlat_qd = 720
 INTEGER, PARAMETER :: nlon = 720, nlat = 360, ntimes = 1460
 REAL(KIND=DP), PARAMETER :: tf = 273.15_DP
