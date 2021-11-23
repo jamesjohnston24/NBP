@@ -27,7 +27,7 @@ REAL(KIND=SP), DIMENSION (nlon_qd, nlat_qd) :: carea, icwtr
 REAL(KIND=DP), DIMENSION (nlon, nlat) :: larea, fwice, mNPP, B, mEV, SOM
 REAL(KIND=DP), DIMENSION (nlon, nlat) :: soilW
 !! JJ add-in
-REAL(KIND=DP), PARAMETER :: it_mon(12) = (/ 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31 /)
+REAL(KIND=DP), PARAMETER :: it_mon = (/ 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31 /)
 
 INTEGER :: kyr_clm, ncid, varid, x, y, i, j, t
 INTEGER :: nland
@@ -43,7 +43,9 @@ WRITE (*,*) 'Running NBP...'
 ALLOCATE (tmp(nlon,nlat,ntimes))
 ALLOCATE (pre(nlon,nlat,ntimes))
 
-it_mon = it_mon*4
+!! multiply elements of it_mon array by 4
+it_mon = it_mon * 4
+
 WRITE (*,*) 'Month index check:' , it_mon
 
 file_name = '/rds/user/jhj34/rds-mb425-geogscratch/adf10/TRENDY2021/&
