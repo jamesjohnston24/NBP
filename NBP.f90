@@ -26,8 +26,8 @@ REAL(KIND=SP), ALLOCATABLE, DIMENSION (:,:,:) :: pre
 REAL(KIND=SP), DIMENSION (nlon_qd, nlat_qd) :: carea, icwtr
 REAL(KIND=DP), DIMENSION (nlon, nlat) :: larea, fwice, mNPP, B, mEV, SOM
 REAL(KIND=DP), DIMENSION (nlon, nlat) :: soilW
-!! JJ add-in
-REAL(KIND=DP), PARAMETER :: it_mon = (/ 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31 /)
+!! JJ add-in  - array of days in each month
+REAL(KIND=DP), DIMENSION (:) :: it_mon = (/31,28,31,30,31,30,31,31,30,31,30,31/)
 
 INTEGER :: kyr_clm, ncid, varid, x, y, i, j, t
 INTEGER :: nland
