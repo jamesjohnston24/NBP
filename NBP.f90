@@ -26,6 +26,9 @@ REAL(KIND=SP), ALLOCATABLE, DIMENSION (:,:,:) :: pre
 REAL(KIND=SP), DIMENSION (nlon_qd, nlat_qd) :: carea, icwtr
 REAL(KIND=DP), DIMENSION (nlon, nlat) :: larea, fwice, mNPP, B, mEV, SOM
 REAL(KIND=DP), DIMENSION (nlon, nlat) :: soilW
+!! JJ add-in
+REAL(KIND=DP), PARAMETER :: it_mon(12) = (/ 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31 /)
+
 INTEGER :: kyr_clm, ncid, varid, x, y, i, j, t
 INTEGER :: nland
 REAL(KIND=DP) :: NPP_local, Rh_local, BL, evap, eas, ea, ro, PPT, win, WFPS
@@ -39,6 +42,9 @@ WRITE (*,*) 'Running NBP...'
 
 ALLOCATE (tmp(nlon,nlat,ntimes))
 ALLOCATE (pre(nlon,nlat,ntimes))
+
+it_mon = it_mon*4
+WRITE (*,*) 'Month index check:' , it_mon
 
 file_name = '/rds/user/jhj34/rds-mb425-geogscratch/adf10/TRENDY2021/&
  &input/LUH2_GCB_2021/staticData_quarterdeg.nc'
@@ -230,7 +236,7 @@ DO kyr_clm = syr_spin, eyr_spin
 
 END DO ! kyr_clm
 
-! Write out binaries of global biomass and SOM fields.
+! Write out binaries of global biomass and SOM fields. (solely post Spin-up!)
 DO y = 1, nlat
  DO x = 1, nlon
   IF (tmp (x,y,1) == tmp_fill) THEN
@@ -240,7 +246,7 @@ DO y = 1, nlat
  END DO
 END DO
 OPEN (10,FILE="B.bin",FORM="UNFORMATTED",STATUS="UNKNOWN")
-WRITE (10) B
+WRITE (10) B !this is all that is required to write B for all grid points - bc it is gridded as a variable already
 CLOSE (10)
 OPEN (10,FILE="SOM.bin",FORM="UNFORMATTED",STATUS="UNKNOWN")
 WRITE (10) SOM
@@ -248,9 +254,9 @@ CLOSE (10)
 
 ! Transient run.
 OPEN (20,FILE="output.txt",STATUS="UNKNOWN")
-DO kyr_clm = syr_tran, eyr_tran
+DO kyr_clm = syr_tran, eyr_tran ! start loop, for each year
 
- var_name = 'tmp'
+ var_name = 'tmp' ! read temp 
  WRITE (char_year, '(I4)') kyr_clm
  file_name = '/rds/user/jhj34/rds-mb425-geogscratch/adf10/TRENDY2021/&
   &input/CRUJRA2021/'//'crujra.v2.2.5d.'//TRIM(var_name)//'.'//&
@@ -262,7 +268,7 @@ DO kyr_clm = syr_tran, eyr_tran
  CALL CHECK (NF90_GET_VAR (ncid, varid, tmp))
  CALL CHECK (NF90_CLOSE (ncid))
 
- var_name = 'pre'
+ var_name = 'pre' !read precipitation
  file_name = '/rds/user/jhj34/rds-mb425-geogscratch/adf10/TRENDY2021/&
   &input/CRUJRA2021/'//'crujra.v2.2.5d.'//TRIM(var_name)//'.'//&
   &char_year//'.365d.noc.nc'
@@ -314,7 +320,7 @@ DO kyr_clm = syr_tran, eyr_tran
      EM = MAX (0.0_DP, EM)
      EM = MIN (1.0_DP, EM)
      EV = ET_SOIL * EM
-     NPP_local = (soilW (x,y) / swc) * fT * 3.0D3 / DBLE (ntimes)
+     NPP_local = (soilW (x,y) / swc) * fT * 3.0D3 / DBLE (ntimes) !NPP calc in nested loop, for every year, for every gricdell, for every timepoint
      Rh_local = EV * SOM (x,y) / (torrSOM * DBLE (ntimes))
      BL = B (x,y) / (torrB * DBLE (ntimes))
      B (x,y) = B (x,y) + NPP_local - BL
@@ -332,7 +338,7 @@ DO kyr_clm = syr_tran, eyr_tran
  tNBP = tNPP/1.0D15 - tRh/1.0D15
  WRITE (20,'(I5,3F12.5)') kyr_clm,tNPP/1.0D15,tRh/1.0D15,tNBP
 
-END DO ! kyr_clm
+END DO ! kyr_clm - this is the end DO for year loop. 
 CLOSE (20)
 
 CONTAINS
