@@ -26,10 +26,14 @@ REAL(KIND=SP), ALLOCATABLE, DIMENSION (:,:,:) :: pre
 REAL(KIND=SP), DIMENSION (nlon_qd, nlat_qd) :: carea, icwtr
 REAL(KIND=DP), DIMENSION (nlon, nlat) :: larea, fwice, mNPP, B, mEV, SOM
 REAL(KIND=DP), DIMENSION (nlon, nlat) :: soilW
-!! JJ add-in  - array of days in each month
-REAL(KIND=DP), DIMENSION (12) :: it_mon = (/31,28,31,30,31,30,31,31,30,31,30,31/)
 
-INTEGER :: kyr_clm, ncid, varid, x, y, i, j, t
+!! JJ add-in  - array of days in each month
+REAL(KIND=DP), DIMENSION (12) :: it_mon = (/31,59,90,120,151,181,212,243,273,304,334,365/)
+! and and NPP monthly holder in the form (lat,lon,month)
+REAL(KIND=SP), ALLOCATABLE, DIMENSION (nlon,nlat,imon) :: npp
+
+
+INTEGER :: kyr_clm, ncid, varid, x, y, i, j, t, imon !JJ added imon
 INTEGER :: nland
 REAL(KIND=DP) :: NPP_local, Rh_local, BL, evap, eas, ea, ro, PPT, win, WFPS
 REAL(KIND=DP) :: TK, TC, tNPP, tland, tarea, fT, tB, ET_SOIL, tSOM, tRh, tNBP
@@ -281,6 +285,9 @@ DO kyr_clm = syr_tran, eyr_tran ! start loop, for each year
  CALL CHECK (NF90_GET_VAR (ncid, varid, pre))
  CALL CHECK (NF90_CLOSE (ncid))
 
+ imon = 1  !sets up index for month 
+
+
  tNPP = 0.0_DP
  tRh = 0.0_DP
  DO y = 1, nlat
@@ -329,6 +336,12 @@ DO kyr_clm = syr_tran, eyr_tran ! start loop, for each year
      SOM (x,y) = SOM (x,y) + BL - Rh_local
      tNPP = tNPP + NPP_local * larea (x,y) * 1.0D6
      tRh = tRh + Rh_local * larea (x,y) * 1.0D6
+
+     ! JJ edits: 
+     npp (x,y,imon) = npp (x,y,imon) + tNPP    !adding npp to get a total for each gridpoint, by month)
+     IF (t == it_mon (imon)) imon = imon + 1   ! increment imon if it_mon == it
+
+
     END DO
    END IF
   END DO
