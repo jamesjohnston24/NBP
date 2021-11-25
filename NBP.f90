@@ -9,7 +9,7 @@ IMPLICIT NONE
 INTEGER, PARAMETER :: syr_spin = 1901, eyr_spin = 1903
 INTEGER, PARAMETER :: syr_tran = 1903, eyr_tran = 1905
 INTEGER, PARAMETER :: nlon_qd = 1440, nlat_qd = 720
-INTEGER, PARAMETER :: nlon = 720, nlat = 360, ntimes = 1460
+INTEGER, PARAMETER :: nlon = 720, nlat = 360, nmon = 12, ntimes = 1460
 REAL(KIND=DP), PARAMETER :: tf = 273.15_DP
 REAL(KIND=SP), PARAMETER :: tmp_fill = 1.0E20
 REAL(KIND=DP), PARAMETER :: soilW_fill = 1.0D20
@@ -31,7 +31,7 @@ INTEGER :: kyr_clm, ncid, varid, x, y, i, j, t, imon !JJ added imon
 !! JJ add-in  - array of days in each month
 REAL(KIND=DP), DIMENSION (12) :: it_mon = (/31,59,90,120,151,181,212,243,273,304,334,365/)
 ! and and NPP monthly holder in the form (lat,lon,month)
-REAL(KIND=SP), ALLOCATABLE, DIMENSION (:,:,:) :: npp
+REAL(KIND=SP), ALLOCATABLE, DIMENSION (:,:,:) :: npp !SP single precision may be wrong here 
 
 INTEGER :: nland
 REAL(KIND=DP) :: NPP_local, Rh_local, BL, evap, eas, ea, ro, PPT, win, WFPS
@@ -41,10 +41,12 @@ CHARACTER(LEN=3) :: var_name
 CHARACTER(LEN=4) :: char_year
 CHARACTER(LEN=200) :: file_name
 
-WRITE (*,*) 'Running NBP...'
+WRITE (*,*) 'Running NBP...'  
 
 ALLOCATE (tmp(nlon,nlat,ntimes))
 ALLOCATE (pre(nlon,nlat,ntimes))
+ALLOCATE (npp(nlon,nlat,nmon)) ! allocate looks for the memory whilst running - nmon needs to be 12 here - as defined earlier
+
 
 !! multiply elements of it_mon array by 4
 it_mon = it_mon * 4
@@ -335,7 +337,6 @@ npp = 0.0_DP
      SOM (x,y) = SOM (x,y) + BL - Rh_local
      tNPP = tNPP + NPP_local * larea (x,y) * 1.0D6
      tRh = tRh + Rh_local * larea (x,y) * 1.0D6
-
      ! JJ edits: 
      npp (x,y,imon) = npp (x,y,imon) + tNPP    !adding npp to get a total for each gridpoint, by month)
      IF (t == it_mon(imon)) THEN  
