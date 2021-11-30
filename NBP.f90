@@ -356,6 +356,10 @@ npp = 0.0_DP
 END DO ! kyr_clm - this is the end DO for year loop. 
 CLOSE (20)
 
+OPEN (10,FILE="npp.bin",FORM="UNFORMATTED",STATUS="UNKNOWN")
+WRITE (10) npp
+CLOSE (10)
+
 CONTAINS
  SUBROUTINE check ( status )
 

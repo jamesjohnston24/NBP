@@ -8,11 +8,12 @@ IMPLICIT NONE
 
 INTEGER, PARAMETER :: nlon = 720, nlat = 360
 INTEGER :: ncid, varid, lon_dimid, lat_dimid, lon_varid, lat_varid
-INTEGER :: varid_soilW, varid_B, varid_SOM
+INTEGER :: varid_soilW, varid_B, varid_SOM, varid_npp
 INTEGER, DIMENSION (2) :: dimids_two
 REAL(KIND=DP), PARAMETER :: soilW_fill = 1.0D20
 REAL(KIND=DP), PARAMETER :: B_fill = 1.0D20
 REAL(KIND=DP), PARAMETER :: SOM_fill = 1.0D20
+REAL(KIND=DP), PARAMETER :: npp_fill = 1.0D20
 REAL(KIND=DP), DIMENSION (nlon, nlat) :: soilW, B, SOM
 REAL, DIMENSION (nlon) :: lon ! Longitude (degrees east)
 REAL, DIMENSION (nlat) :: lat ! Latitude (degrees north)
@@ -38,6 +39,11 @@ CLOSE (10)
 ! Read binary of global biomass field.
 OPEN (10,FILE="SOM.bin",FORM="UNFORMATTED",STATUS="UNKNOWN")
 READ (10) SOM
+CLOSE (10)
+
+! Read binary of npp field.
+OPEN (10,FILE="npp.bin",FORM="UNFORMATTED",STATUS="UNKNOWN")
+READ (10) npp
 CLOSE (10)
 
 file_name = "fields_grid.nc"
