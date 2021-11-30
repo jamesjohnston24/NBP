@@ -17,7 +17,7 @@ REAL(KIND=DP), PARAMETER :: npp_fill = 1.0D20
 REAL(KIND=DP), DIMENSION (nlon, nlat, imon) :: npp
 REAL, DIMENSION (nlon) :: lon ! Longitude (degrees east)
 REAL, DIMENSION (nlat) :: lat ! Latitude (degrees north)
-REAL, DIMENSION (imon) :: imon ! time (months)
+REAL, DIMENSION (imon) :: month ! time (months)
 
 CHARACTER(LEN=200) :: file_name
 
@@ -33,7 +33,7 @@ OPEN (10,FILE="npp.bin",FORM="UNFORMATTED",STATUS="UNKNOWN")
 READ (10) npp
 CLOSE (10)
 
-file_name = "fields_grid.nc"
+file_name = "npp_fields_grid.nc"
 CALL CHECK (NF90_CREATE (TRIM (file_name), CMODE = NF90_CLOBBER, &
             ncid = ncid))
 CALL CHECK (NF90_DEF_DIM (ncid, "longitude", nlon, lon_dimid))
@@ -44,7 +44,7 @@ CALL CHECK (NF90_DEF_VAR (ncid, "longitude", nf90_float, lon_dimid, &
             lon_varid))
 CALL CHECK (NF90_DEF_VAR (ncid, "latitude" , nf90_float, lat_dimid, &
             lat_varid))
-CALL CHECK (NF90_DEF_VAR (ncid, "month" , nf90_float, _dimid, &
+CALL CHECK (NF90_DEF_VAR (ncid, "month" , nf90_float, imon_dimid, &
             lat_varid))
 
 dimids_three = (/ lon_dimid, lat_dimid, imon_dimid /)
@@ -63,7 +63,7 @@ CALL CHECK (NF90_PUT_ATT (ncid, varid_npp, "_FillValue", &
 CALL CHECK (NF90_ENDDEF (ncid))
 CALL CHECK (NF90_PUT_VAR (ncid, lon_varid, lon))
 CALL CHECK (NF90_PUT_VAR (ncid, lat_varid, lat))
-CALL CHECK (NF90_PUT_VAR (ncid, imon_varid, imon))
+CALL CHECK (NF90_PUT_VAR (ncid, imon_varid, month))
 
 CALL CHECK (NF90_PUT_VAR (ncid,     varid_npp, npp))
 
