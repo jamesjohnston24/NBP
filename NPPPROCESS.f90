@@ -45,7 +45,7 @@ CALL CHECK (NF90_DEF_VAR (ncid, "longitude", nf90_float, lon_dimid, &
 CALL CHECK (NF90_DEF_VAR (ncid, "latitude" , nf90_float, lat_dimid, &
             lat_varid))
 CALL CHECK (NF90_DEF_VAR (ncid, "month" , nf90_float, imon_dimid, &
-            lat_varid))
+            imon_varid))
 
 dimids_three = (/ lon_dimid, lat_dimid, imon_dimid /)
 CALL CHECK (NF90_PUT_ATT (ncid, lon_varid, "units", "degrees_east"))

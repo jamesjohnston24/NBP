@@ -27,7 +27,7 @@ REAL(KIND=SP), DIMENSION (nlon_qd, nlat_qd) :: carea, icwtr
 REAL(KIND=DP), DIMENSION (nlon, nlat) :: larea, fwice, mNPP, B, mEV, SOM
 REAL(KIND=DP), DIMENSION (nlon, nlat) :: soilW
 
-INTEGER :: kyr_clm, ncid, varid, x, y, i, j, t, imon !JJ added imon
+INTEGER :: kyr_clm, ncid, varid, x, y, z, i, j, t, imon !JJ added imon and z
 !! JJ add-in  - array of days in each month
 REAL(KIND=DP), DIMENSION (12) :: it_mon = (/31,59,90,120,151,181,212,243,273,304,334,365/)
 ! and and NPP monthly holder in the form (lat,lon,month)
@@ -356,9 +356,18 @@ npp = 0.0_DP
 END DO ! kyr_clm - this is the end DO for year loop. 
 CLOSE (20)
 
+DO y = 1, nlat
+ DO x = 1, nlon
+  DO z = 1, imon
+   IF (tmp (x,y,1) == tmp_fill) THEN
+   npp (x,y,z) = soilW_fill
+   END IF
+  END DO
+ END DO
+END DO
 OPEN (10,FILE="npp.bin",FORM="UNFORMATTED",STATUS="UNKNOWN")
 WRITE (10) npp
-CLOSE (10)
+CLOSE (10) !possibly can't do this - does writing as a binary remove the structure? surely not as SoilW etc has a lat lon structure which is preserved
 
 CONTAINS
  SUBROUTINE check ( status )
