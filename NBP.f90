@@ -15,6 +15,7 @@ REAL(KIND=SP), PARAMETER :: tmp_fill = 1.0E20
 REAL(KIND=DP), PARAMETER :: soilW_fill = 1.0D20
 REAL(KIND=DP), PARAMETER :: B_fill = 1.0D20
 REAL(KIND=DP), PARAMETER :: SOM_fill = 1.0D20
+REAL(KIND=DP), PARAMETER :: npp_fill = 1.0D20
 REAL(KIND=DP), PARAMETER :: torrB = 12.5
 REAL(KIND=DP), PARAMETER :: torrSOM = 6.25
 REAL(KIND=DP), PARAMETER :: EPS = 1.0D-8
@@ -29,9 +30,9 @@ REAL(KIND=DP), DIMENSION (nlon, nlat) :: soilW
 
 INTEGER :: kyr_clm, ncid, varid, x, y, z, i, j, t, imon !JJ added imon and z
 !! JJ add-in  - array of days in each month
-REAL(KIND=DP), DIMENSION (12) :: it_mon = (/31,59,90,120,151,181,212,243,273,304,334,365/)
+INTEGER, DIMENSION (12) :: it_mon = (/31,59,90,120,151,181,212,243,273,304,334,365/)
 ! and and NPP monthly holder in the form (lat,lon,month)
-REAL(KIND=SP), ALLOCATABLE, DIMENSION (:,:,:) :: npp !SP single precision may be wrong here 
+REAL(KIND=DP), ALLOCATABLE, DIMENSION (:,:,:) :: npp !SP single precision may be wrong here 
 
 INTEGER :: nland
 REAL(KIND=DP) :: NPP_local, Rh_local, BL, evap, eas, ea, ro, PPT, win, WFPS
@@ -346,7 +347,8 @@ npp = 0.0_DP
    END IF
   END DO
  END DO
-! this is where the output.txt bits are written: 
+! this is where the output.txt bits atRh = tRh + Rh_local * larea (x,y) * 1.0D6re written: the first three write to
+! terminal, WRITE(20) below writes to output.txt  
  WRITE (*,*) 'kyr_clm = ',kyr_clm
  WRITE (*,*) 'tNPP    = ',tNPP/1.0D15
  WRITE (*,*) 'tRh     = ',tRh/1.0D15
@@ -358,9 +360,9 @@ CLOSE (20)
 
 DO y = 1, nlat
  DO x = 1, nlon
-  DO z = 1, imon
+  DO z = 1, nmon
    IF (tmp (x,y,1) == tmp_fill) THEN
-   npp (x,y,z) = soilW_fill
+   npp (x,y,z) = npp_fill
    END IF
   END DO
  END DO
