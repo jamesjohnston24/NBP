@@ -294,6 +294,7 @@ npp = 0.0_DP
  tRh = 0.0_DP
  DO y = 1, nlat
   DO x = 1, nlon
+   imon = 1  ! sets up index for each month AND resets each iteration
    IF (tmp (x,y,1) /= tmp_fill) THEN
     DO t = 1, ntimes
      PPT = pre (x,y,t) / 1.0D3
@@ -367,9 +368,10 @@ DO y = 1, nlat
   END DO
  END DO
 END DO
+
 OPEN (10,FILE="npp.bin",FORM="UNFORMATTED",STATUS="UNKNOWN")
 WRITE (10) npp
-CLOSE (10) !possibly can't do this - does writing as a binary remove the structure? surely not as SoilW etc has a lat lon structure which is preserved
+CLOSE (10) !possible issues with this? 
 
 CONTAINS
  SUBROUTINE check ( status )

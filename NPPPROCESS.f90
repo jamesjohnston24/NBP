@@ -6,7 +6,7 @@ USE double
 
 IMPLICIT NONE
 
-INTEGER, PARAMETER :: nlon = 720, nlat = 360, imon = 12
+INTEGER, PARAMETER :: nlon = 720, nlat = 360, nmon = 12
 INTEGER :: ncid, varid, lon_dimid, lat_dimid, imon_dimid, lon_varid, lat_varid, imon_varid
 INTEGER :: varid_soilW, varid_B, varid_SOM, varid_npp
 INTEGER, DIMENSION (3) :: dimids_three
@@ -14,10 +14,13 @@ REAL(KIND=DP), PARAMETER :: soilW_fill = 1.0D20
 REAL(KIND=DP), PARAMETER :: B_fill = 1.0D20
 REAL(KIND=DP), PARAMETER :: SOM_fill = 1.0D20
 REAL(KIND=DP), PARAMETER :: npp_fill = 1.0D20
-REAL(KIND=DP), DIMENSION (nlon, nlat, imon) :: npp
+REAL(KIND=DP), DIMENSION (nlon, nlat, nmon) :: npp
 REAL, DIMENSION (nlon) :: lon ! Longitude (degrees east)
 REAL, DIMENSION (nlat) :: lat ! Latitude (degrees north)
-REAL, DIMENSION (imon) :: month ! time (months)
+REAL, DIMENSION (nmon) :: month ! time (months)
+
+! can add a NPP single precision (for smaller netcfd files)
+REAL(KIND=SP), DIMENSION (nlon, nlat, nmon) :: npp_sp 
 
 CHARACTER(LEN=200) :: file_name
 
@@ -33,21 +36,24 @@ OPEN (10,FILE="npp.bin",FORM="UNFORMATTED",STATUS="UNKNOWN")
 READ (10) npp
 CLOSE (10)
 
+! Can now convert DP to SP npp:
+npp_sp = SNGL(npp) ! if this doesn't work, try SNGL replaced with REAL(npp)
+
 file_name = "npp_fields_grid.nc"
 CALL CHECK (NF90_CREATE (TRIM (file_name), CMODE = NF90_CLOBBER, &
             ncid = ncid))
 CALL CHECK (NF90_DEF_DIM (ncid, "longitude", nlon, lon_dimid))
 CALL CHECK (NF90_DEF_DIM (ncid, "latitude" , nlat, lat_dimid))
-CALL CHECK (NF90_DEF_DIM (ncid, "month" , imon, imon_dimid))
+CALL CHECK (NF90_DEF_DIM (ncid, "month" , nmon, imon_dimid))
 
 CALL CHECK (NF90_DEF_VAR (ncid, "longitude", nf90_float, lon_dimid, &
             lon_varid))
 CALL CHECK (NF90_DEF_VAR (ncid, "latitude" , nf90_float, lat_dimid, &
             lat_varid))
-CALL CHECK (NF90_DEF_VAR (ncid, "month" , nf90_float, imon_dimid, &
+CALL CHECK (NF90_DEF_VAR (ncid, "month" , nf90_int, imon_dimid, &
             imon_varid))
 
-dimids_three = (/ lon_dimid, lat_dimid, imon_dimid /)
+    dimids_three = (/ lon_dimid, lat_dimid, imon_dimid /) ! your variable needs to be in this order 
 CALL CHECK (NF90_PUT_ATT (ncid, lon_varid, "units", "degrees_east"))
 CALL CHECK (NF90_PUT_ATT (ncid, lat_varid, "units", "degrees_north"))
 CALL CHECK (NF90_PUT_ATT (ncid, imon_varid, "units", "month"))
